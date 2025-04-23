@@ -4,7 +4,7 @@ import Login from "./pages/login";
 import { AuthContext } from "./context/AuthContext";
 import { useEffect, useState } from "react";
 import services from "./Shared/services";
-import Home from "./pages/Home";
+import Home from "./pages/home";
 
 export default function Index() {
 

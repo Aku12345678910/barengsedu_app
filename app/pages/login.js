@@ -1,9 +1,9 @@
 import { StyleSheet, View, Text, Image, Touchable, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import colors from './Shared/colors'
+import colors from '../Shared/colors'
 import { Ionicons } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
-import * as Google from 'expo-auth-session/provider/google';
+import * as Google from 'expo-auth-session/providers/google'
 
 export default function Login() {
         WebBrowser.maybeCompleteAuthSession();
