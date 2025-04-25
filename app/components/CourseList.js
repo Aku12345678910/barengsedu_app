@@ -1,14 +1,16 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import GlobalApi from "../Shared/GlobalApi";
 import { FlatList } from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import colors from "../Shared/colors";
+import { useNavigation } from "expo-router";
 
 export default function CourseList({type}) {
-        const [CourseList,setCourseList]=useState([])
+        const [courseList,setCourseList]=useState([])
+        const navigation=useNavigation();
         useEffect(()=>{
-            console.log("Type",type);
+            
             getCourseList();
         })
 
@@ -24,16 +26,21 @@ export default function CourseList({type}) {
             console.log(result);
             setCourseList(result);
         }
+        const onPressCourse=(course)=>{
+           
+            navigation.navigate('course-detail',{courseData:course})
+        }
     return (
         <View style={{marginTop :10}}>
             <Text style={{fontSize:20,fontWeight:'bold',
                 textTransform:'capitalize', marginBottom :3}}>{type} Course</Text>
             <FlatList
-            data={CourseList}
+            data={courseList}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             renderItem={({item})=>(
-                <View style={{backgroundColor:Colors.white,marginRight :10,borderRadius:10}}>
+                <TouchableOpacity style={{backgroundColor:Colors.white,marginRight :10,
+                borderRadius:10}} onPress={()=>onPressCourse(item)}>
                     <Image source={{uri:item.image}} 
                     style={{width :200, height :120, borderRadius:10}} /> 
                     <View style={{padding:10}}>
@@ -41,7 +48,7 @@ export default function CourseList({type}) {
                     <Text style={{color:colors.gray, fontWeight:'300'}}>{item.Topic?.length} Lessons</Text>
                     </View>
                     
-                </View>
+                </TouchableOpacity>
             )}
             />
         </View>

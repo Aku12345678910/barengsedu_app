@@ -1,10 +1,13 @@
-import { View, Text, TurboModuleRegistry } from 'react-native'
+import { View, Text, TurboModuleRegistry, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { FlatList } from 'react-native-web';
+import { useNavigation } from 'expo-router';
 
 
 export default function VideoCourseList(){
     const [videoList,setVideoList]=useState([])
+    const navigation=useNavigation();
+
     useEffect(()=>{
         getVideoCourse();
     },[])
@@ -12,13 +15,17 @@ export default function VideoCourseList(){
         const resp= (await GlobalApi.getVideoCourse()).data;
         const result=resp.data.map((item)=>({
             id:item.id,
-            title:item.attributes.title,
-            desc:item.attributes.description,
+            name:item.attributes.title,
+            description:item.attributes.description,
             image:item.attributes.image.data.attributes.url,
-            videoTopic:item.attributes.VideoTopic
+            Topic:item.attributes.VideoTopic
         }))
         setVideoList(result);
         console.log(result)
+    }
+    const onPressCourse=(course)=>{
+           
+        navigation.navigate('course-detail',{courseData:course})
     }
     return (
         <View style={{marginTop :15}}>
@@ -28,10 +35,11 @@ export default function VideoCourseList(){
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             renderItem={({item})=>(
-                <View>
+                <TouchableOpacity onPress={()=>onPressCourse(item)}>
                   <Image source={{uri:item.image}} 
-                  style={{width : 180, height :100, marginRight :10, borderRadius:7}} />  
-                </View>
+                  style={{width : 180, height :100, 
+                  marginRight :10, borderRadius:7}} />  
+                </TouchableOpacity>
             )}
             />
         </View>
