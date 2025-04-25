@@ -6,20 +6,23 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { FlatList } from 'react-native';
 import colors from '../Shared/colors';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
+import ProgressBar from '../components/ProgressBar';
 
 export default function CourseChapter() {
     const navigation=useNavigation();
     const param=useRoute().params;
     const [chapter,setChapter]=useState([])
     const [run,setRun]=useState(false);
+    const [progrees,setProgress]=useState(0);
     let chapterRef;
-    const [currentIndex,setCurrentIndex]=useState(0);
+    
     useEffect(()=>{
-        
+        setProgress(0);
         setChapter(param.courseContent.Content)
     },[])
     const onClickNext=(index)=>{
-        setRun(false)
+        setRun(false);
+        setProgress(index+1/chapter.length)
         try{
             chapterRef.scrollToIndex({animated:true,index:index+1})
         }
@@ -34,6 +37,7 @@ export default function CourseChapter() {
                 <TouchableOpacity onPress={()=>navigation.goBack()}>
                 <Ionicons name="arrow-back-sharp" size={24} color="white" style={{marginRight :10}}/>
                 </TouchableOpacity>
+                <ProgressBar progrees={progrees}/>
                 <FlatList
                     data={chapter}
                     horizontal={true}
