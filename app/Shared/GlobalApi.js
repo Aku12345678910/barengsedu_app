@@ -10,10 +10,18 @@ const api = create({
 const getSlider=()=>api.get('/sliders?populate=*');
 const getVideoCourse=()=>api.get('video-source?populate=*');
 const getCourseList=(type)=>api.get('course-lists?filters[type][$eq]='
-    +type+'&populate[Topic][populate][0]=image');
+    +type+'&populate[Topic][populate][0]=Content&populate[image][populate]');
+
+const setCourseProgress=(data)=>api.post('/course-progresses',data);
+
+const getCourseProgress=(uid,courseId)=>
+api.get('/course-progress?filters[uid][$eq]='
++uid+'&filters[courseId][$eq]='+courseId)
 
 export default {
     getSlider,
     getVideoCourse,
-    getCourseList
+    getCourseList,
+    setCourseProgress,
+    getCourseProgress
 }

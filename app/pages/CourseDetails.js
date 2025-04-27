@@ -5,14 +5,36 @@ import { Ionicons } from '@expo/vector-icons';
 import colors from '../Shared/colors';
 import CourseContent from '../components/CourseContent';
 import { useNavigation } from 'expo-router';
-
+import GlobalApi from '../Shared/GlobalApi';
+import { AuthContext } from '../context/AuthContext';
 export default function CourseDetails() {
     const param=useRoute().params;
     const [course,setCourse]=useState([])
     const navigation=useNavigation();
+    const [userProgress,setCourseProgress]=useState([]);
+    const {userData,setUserData}=userContext(AuthContext);
     useEffect(()=>{
-        setCourse(param.courseData);
-    },[])
+        setCourse(param?.courseData);
+        param.courseData.id?getCourseProgress():null;
+    },[param.courseContentId])
+
+    const getCourseProgress=()=>{
+        GlobalApi.getCourseProgress(userData.id,param?.courseData.id)
+        .then(resp=>{
+           if(resp.data.data)
+            {
+                const result=resp.data.data.map(item=>({
+                    id:item.id,
+                    "courseId": item.attributes.courseId,
+                    "courseContentId":item.attributes.courseContentId,
+                }))
+
+                setCourseProgress(result);
+            } 
+        })
+    }
+
+
     return (
         <View style={{padding:20,paddingTop :50}}>
              <TouchableOpacity onPress={()=>navigation.goBack()}>
@@ -29,8 +51,7 @@ export default function CourseDetails() {
                     <Text numberOfLines={4}
                     style={{color:colors.gray}}>{course.description}</Text>
                 </View>
-                <CourseContent course={course}/>
-                
+                <CourseContent course={course} userProgress={userProgress}/> 
         </View>
     )
 }

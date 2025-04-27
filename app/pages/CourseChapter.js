@@ -7,6 +7,9 @@ import { FlatList } from 'react-native';
 import colors from '../Shared/colors';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import ProgressBar from '../components/ProgressBar';
+import services from '../Shared/services';
+import GlobalApi from '../Shared/GlobalApi';
+import { AuthContext } from '../context/AuthContext';
 
 export default function CourseChapter() {
     const navigation=useNavigation();
@@ -14,6 +17,7 @@ export default function CourseChapter() {
     const [chapter,setChapter]=useState([])
     const [run,setRun]=useState(false);
     const [progrees,setProgress]=useState(0);
+    const {userData,setUserData}=userContext(AuthContext);
     let chapterRef;
     
     useEffect(()=>{
@@ -28,8 +32,18 @@ export default function CourseChapter() {
         }
         catch(e) 
         {
-            console.log(e);
-            navigation.goBack()
+            let coursePro;
+            const data={
+                data:{
+                    uid:userData.id,
+                    courseId:param.courseId,
+                    courseContentId:param.courseContent.id
+                }
+            }
+            GlobalApi.setCourseProgress(data).then(resp=>{
+                navigation.goBack()
+            })
+           
         }
     }
     return (
