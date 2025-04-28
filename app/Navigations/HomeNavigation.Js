@@ -12,6 +12,7 @@ export default function HomeNavigation() {
             <Stack.Screen name="home" component={Home}></Stack.Screen>
             <Stack.Screen name="course-detail" component={CourseDetailsDetails} />
             <Stack.Screen name="course-chapter" component={CourseChapter}/>
+            <Stack.Screen name="play-video" component={PlayVideo}/>
         </Stack.Navigator>
     )
 }

@@ -51,7 +51,9 @@ export default function CourseDetails() {
                     <Text numberOfLines={4}
                     style={{color:colors.gray}}>{course.description}</Text>
                 </View>
-                <CourseContent course={course} userProgress={userProgress}/> 
+                <CourseContent course={course} 
+                userProgress={userProgress}
+                courseType={param.courseType} /> 
         </View>
     )
 }

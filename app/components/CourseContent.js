@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import colors from '../Shared/colors';
 import { useNavigation } from 'expo-router';
 
-export default function CourseContent({course}) {
+export default function CourseContent({course,userProgress,courseType}) {
         const navigation=useNavigation();
         useEffect(()=>{
             console.log("userProgress",userProgress)
@@ -14,6 +14,23 @@ export default function CourseContent({course}) {
             return userProgress.find(item=>item.courseContentId==contentId)
         } 
 
+        const onChapterPress=(courseContent)=>{
+            if(courseType=='text')
+            {
+            navigation.navigate('course-chapter',
+                {courseContent:courseContent,
+                    courseId:course.id,
+                      
+                })
+        }
+        else{
+            navigation.navigate('play-video',
+                {courseContent:courseContent,
+                    courseId:course.id,
+                      
+                })
+        }
+    }
 
     return (
         <View style={{marginTop :10}}>
@@ -23,11 +40,7 @@ export default function CourseContent({course}) {
             style={{marginTop :10}}
             data={course?.Topic}
             renderItem={({item,index})=>(
-                <TouchableOpacity onPress={()=>
-                    navigation.navigate('course-chapter',
-                    {courseContent:item,
-                        courseId:course.id,  
-                    })} style={{display:'flex',
+                <TouchableOpacity onPress={()=>onChapterPress} style={{display:'flex',
                     flexDirection:'row',backgroundColor:colors.white,marginBottom :10,
                     padding:13,alignItems:'center',borderRadius:5}}>     
                     { checkUserProgress(item.id)? <Ionicons name="checkmark-circle" size={24} 
